@@ -38,26 +38,33 @@
                 xmlArray.Add(resource);
             }
 
-            var enXml = xmlArray[0].ChildNodes.OfType<XmlNode>().FirstOrDefault(x => x.Name == "root");
+            var enXml = xmlArray[0].ChildNodes.OfType<XmlNode>().FirstOrDefault(x => x.Name == "resources");
 
-            var jaXml = xmlArray[0].ChildNodes.OfType<XmlNode>().FirstOrDefault(x => x.Name == "root");
+            var jaXml = xmlArray[0].ChildNodes.OfType<XmlNode>().FirstOrDefault(x => x.Name == "resources");
 
             foreach (XmlNode rootNode in xmlArray[2].ChildNodes)
             {
                 if (rootNode.Name != "root")
                 {
-                    return;
+                    continue;
                 }
 
-                foreach (XmlNode node in xmlArray[2].ChildNodes)
+                foreach (XmlNode node in rootNode.ChildNodes)
                 {
+                    if (node == null)
+                    {
+                        continue;
+                    }
+
                     if (node.Name != "data")
                     {
                         continue;
                     }
 
                     var winName = node.Attributes["name"];
-                    var winValue = node.Attributes["value"];
+                    var winValue = node.ChildNodes.OfType<XmlNode>().FirstOrDefault(x => x.Name == "value").InnerText;
+
+
                 }
             }
         }
