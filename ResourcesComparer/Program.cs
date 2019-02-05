@@ -26,7 +26,7 @@
             args[1] = Path.Combine(args[0], args[1]);
             args[2] = Path.Combine(args[0], args[2]);
             args[3] = Path.Combine(args[0], args[3]);
-            var output = Path.Combine(args[0], args[3], "_japan");
+            var output = Path.Combine(args[0], args[3]) + "_japan";
 
             if (!File.Exists(args[1]) || !File.Exists(args[2]) || !File.Exists(args[3]))
             {
@@ -47,6 +47,7 @@
 
             using (StreamWriter writer = new StreamWriter(output))
             {
+                writer.WriteLine($"Windows app English res name;Windows value;Android English name;Android value;Japan name;Japan value");
 
                 foreach (XmlNode rootNode in xmlArray[2].ChildNodes)
                 {
@@ -77,19 +78,24 @@
                         //{ Node = node, Value = winValue, Name = winName.Value }
                         var winNode = new XmlNodeWithValue(node, false);
 
-                        var englishNodeWithTanimoto = enXml.ChildNodes.OfType<XmlNode>().Select(x => new XmlNodeWithValue()
+                        var englishNodeWithTanimoto = enXml.ChildNodes.OfType<XmlNode>().Select(x => new XmlNodeWithValue(x, true)
                         {
-                            Node = x,
                             Tanimoto = TanimotoStringComparer.Tanimoto(x.InnerText, winNode.Value, 1.2)
                         }).Where(x => x.Tanimoto > 0.7);
+
+                        if (englishNodeWithTanimoto.Count() == 0)
+                        {
+                            continue;
+                        }
+
                         var maxTanimoto = englishNodeWithTanimoto.Max(x => x.Tanimoto);
                         var englishNode = englishNodeWithTanimoto.FirstOrDefault(x => x.Tanimoto == maxTanimoto);
 
                         var japanNode = jaXml.ChildNodes.OfType<XmlNode>().FirstOrDefault(x => x.NodeType != XmlNodeType.Comment
                                                                                                && x.Attributes["name"].Value == englishNode.Node.Attributes["name"].Value);
 
-                        var ourXmlNode = new XmlNodeWithValue(japanNode, true);
-                        SaveToCsv(writer, winNode, englishNode, japanNode);
+                        var ourJapanXmlNode = new XmlNodeWithValue(japanNode, true);
+                        SaveToCsv(writer, winNode, englishNode, ourJapanXmlNode);
                     }
                 }
 
@@ -102,8 +108,7 @@
                                       XmlNodeWithValue englishNode, 
                                       XmlNodeWithValue japanNode)
         {
-            writer.WriteLine($"'{winNode.Name}';'{winNode.Value}';'{englishNode.Name}';'{englishNode.Name}'"
-                                + (japanNode));
+            writer.WriteLine($"'{winNode.Name}';'{winNode.Value}';'{englishNode.Name}';'{englishNode.Value}';'{japanNode.Name}';'{japanNode.Value}'");
         }
     }
 }

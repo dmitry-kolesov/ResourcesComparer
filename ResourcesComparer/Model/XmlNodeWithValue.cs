@@ -45,7 +45,7 @@
 
         internal string GetNodeName()
         {
-            return Node.Attributes["name"].Value;
+            return Node.Attributes?["name"].Value;
         }
 
         internal string GetAndroidValue()

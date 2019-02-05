@@ -10,14 +10,5 @@ namespace ResourcesComparer.Helper
 
     class XmlHelper
     {
-        internal string GetNodeName(XmlNode node)
-        {
-            return node.Attributes["name"].Value;
-        }
-
-        internal string GetNodeValue()
-        {
-
-        }
     }
 }
