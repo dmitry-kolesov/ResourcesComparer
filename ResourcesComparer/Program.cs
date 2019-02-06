@@ -4,13 +4,10 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Reflection;
     using System.Xml;
-
-    using ResourcesComparer.Calculation;
     using ResourcesComparer.Helper;
 
-    partial class Program
+    class Program
     {
         /// <summary>
         /// At first - third param will be single file, after - load all resx from directory
@@ -29,7 +26,7 @@
             args[1] = Path.Combine(args[0], args[1]);
             args[2] = Path.Combine(args[0], args[2]);
             args[3] = Path.Combine(args[0], args[3]);
-
+            
             if (!File.Exists(args[1]) || !File.Exists(args[2]) || !File.Exists(args[3]))
             {
                 return;
@@ -42,20 +39,22 @@
                 resource.Load(args[i]);
                 xmlArray.Add(resource);
             }
-            
+
             var enXml = xmlArray[0].ChildNodes.OfType<XmlNode>().FirstOrDefault(x => x.Name == "resources");
 
             var jaXml = xmlArray[1].ChildNodes.OfType<XmlNode>().FirstOrDefault(x => x.Name == "resources");
-
+            
+            // todo to own method
             foreach (var windowsResource in windowsResources)
             {
                 var resource = new XmlDocument();
                 resource.Load(windowsResource.FullName);
-                var output = Path.Combine(windowsResource.FullName) + "_japan";
+                var output = Path.Combine(windowsResource.FullName) + "_japan.csv";
 
                 using (StreamWriter writer = new StreamWriter(output))
                 {
-                    writer.WriteLine($"Windows app English res name;Windows value;Android Res English name;Android value;Japan Res name;Japan value");
+                    writer.WriteLine(
+                        $"Windows app English res name;Windows value;Android Res English name;Android value;Japan Res name;Japan value");
 
                     XmlConverter.SaveTo(enXml, jaXml, resource, writer, XmlConverter.SaveToCsvSingle);
 
@@ -63,6 +62,5 @@
                 }
             }
         }
-
     }
 }

@@ -1,19 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ResourcesComparer.Helper
+﻿namespace ResourcesComparer.Helper
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     using System.IO;
     using System.Xml;
 
     using ResourcesComparer.Calculation;
 
-    class XmlConverter
+    public class XmlConverter
     {
-        internal static void SaveTo(XmlNode enXml,
+        public static void SaveTo(XmlNode enXml,
                                    XmlNode jaXml,
                                    XmlDocument windowsResource,
                                    StreamWriter writer,
@@ -56,9 +54,9 @@ namespace ResourcesComparer.Helper
                                                         .OfType<XmlNode>()
                                                         .Where(x => x.NodeType != XmlNodeType.Comment)
                                                         .Select(x => new XmlNodeWithValue(x, true)
-                    {
-                        Tanimoto = TanimotoStringComparer.Tanimoto(x.InnerText, winNode.Value, 1.2)
-                    }).Where(x => x.Tanimoto > 0.7);
+                                                        {
+                                                            Tanimoto = TanimotoStringComparer.Tanimoto(x.InnerText, winNode.Value, 1.2)
+                                                        }).Where(x => x.Tanimoto > 0.7);
 
                     if (englishNodeWithTanimoto.Count() == 0)
                     {

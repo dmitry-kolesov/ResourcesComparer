@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.271
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourcesComparer", "ResourcesComparer\ResourcesComparer.csproj", "{A43AA03B-7E59-469F-BEE3-F0EF29428637}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BadSamplesBackResourceConverter", "BadSamplesBackResourceConverter\BadSamplesBackResourceConverter.csproj", "{B791E4BF-CFA8-4A43-9703-2FE5DC0FE23C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A43AA03B-7E59-469F-BEE3-F0EF29428637}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A43AA03B-7E59-469F-BEE3-F0EF29428637}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A43AA03B-7E59-469F-BEE3-F0EF29428637}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B791E4BF-CFA8-4A43-9703-2FE5DC0FE23C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B791E4BF-CFA8-4A43-9703-2FE5DC0FE23C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B791E4BF-CFA8-4A43-9703-2FE5DC0FE23C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B791E4BF-CFA8-4A43-9703-2FE5DC0FE23C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

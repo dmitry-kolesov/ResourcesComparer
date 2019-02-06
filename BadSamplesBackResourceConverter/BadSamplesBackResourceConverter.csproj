@@ -4,12 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A43AA03B-7E59-469F-BEE3-F0EF29428637}</ProjectGuid>
+    <ProjectGuid>{B791E4BF-CFA8-4A43-9703-2FE5DC0FE23C}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>ResourcesComparer</RootNamespace>
-    <AssemblyName>ResourcesComparer</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>BadSamplesBackResourceConverter</RootNamespace>
+    <AssemblyName>BadSamplesBackResourceConverter</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -42,18 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helper\XmlConverter.cs" />
-    <Compile Include="Helper\TanimotoStringComparer.cs" />
-    <Compile Include="Model\XmlNodesMapItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Model\XmlNodeWithValue.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="data\" />
+    <ProjectReference Include="..\ResourcesComparer\ResourcesComparer.csproj">
+      <Project>{a43aa03b-7e59-469f-bee3-f0ef29428637}</Project>
+      <Name>ResourcesComparer</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -3,7 +3,7 @@
     using System.Linq;
     using System.Xml;
 
-    internal class XmlNodeWithValue
+    public class XmlNodeWithValue
     {
         public double Tanimoto { get; set; }
 
@@ -41,6 +41,16 @@
 
             var text = this.Node.ChildNodes.OfType<XmlNode>().FirstOrDefault(x => x.Name == "value").InnerText;
             return text;
+        }
+
+        public void SetWinValue(string value)
+        {
+            if (this.Node == null)
+            {
+                return;
+            }
+
+            this.Node.ChildNodes.OfType<XmlNode>().FirstOrDefault(x => x.Name == "value").InnerText = value;
         }
 
         internal string GetNodeName()
