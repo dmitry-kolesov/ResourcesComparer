@@ -42,8 +42,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helper\XmlHelper.cs" />
+    <Compile Include="Helper\XmlConverter.cs" />
     <Compile Include="Helper\TanimotoStringComparer.cs" />
+    <Compile Include="Model\XmlNodesMapItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\XmlNodeWithValue.cs" />

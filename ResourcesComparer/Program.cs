@@ -1,5 +1,6 @@
 ﻿namespace ResourcesComparer
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -7,6 +8,7 @@
     using System.Xml;
 
     using ResourcesComparer.Calculation;
+    using ResourcesComparer.Helper;
 
     partial class Program
     {
@@ -21,12 +23,12 @@
                 return;
             }
 
-            var assPath = new DirectoryInfo(Assembly.GetEntryAssembly().Location).Parent.FullName;
+            var directory = new DirectoryInfo(args[0]);
 
+            var windowsResources = directory.GetFiles("*.resx");
             args[1] = Path.Combine(args[0], args[1]);
             args[2] = Path.Combine(args[0], args[2]);
             args[3] = Path.Combine(args[0], args[3]);
-            var output = Path.Combine(args[0], args[3]) + "_japan";
 
             if (!File.Exists(args[1]) || !File.Exists(args[2]) || !File.Exists(args[3]))
             {
@@ -40,75 +42,27 @@
                 resource.Load(args[i]);
                 xmlArray.Add(resource);
             }
-
+            
             var enXml = xmlArray[0].ChildNodes.OfType<XmlNode>().FirstOrDefault(x => x.Name == "resources");
 
             var jaXml = xmlArray[1].ChildNodes.OfType<XmlNode>().FirstOrDefault(x => x.Name == "resources");
 
-            using (StreamWriter writer = new StreamWriter(output))
+            foreach (var windowsResource in windowsResources)
             {
-                writer.WriteLine($"Windows app English res name;Windows value;Android English name;Android value;Japan name;Japan value");
+                var resource = new XmlDocument();
+                resource.Load(windowsResource.FullName);
+                var output = Path.Combine(windowsResource.FullName) + "_japan";
 
-                foreach (XmlNode rootNode in xmlArray[2].ChildNodes)
+                using (StreamWriter writer = new StreamWriter(output))
                 {
-                    if (rootNode.Name != "root")
-                    {
-                        continue;
-                    }
+                    writer.WriteLine($"Windows app English res name;Windows value;Android Res English name;Android value;Japan Res name;Japan value");
 
-                    foreach (XmlNode node in rootNode.ChildNodes)
-                    {
-                        if (node == null)
-                        {
-                            continue;
-                        }
+                    XmlConverter.SaveTo(enXml, jaXml, resource, writer, XmlConverter.SaveToCsvSingle);
 
-                        if (node.Name != "data")
-                        {
-                            continue;
-                        }
-
-                        if (node.Attributes["type"] != null)
-                        {
-                            continue;
-                        }
-
-                        //var winName = node.Attributes["name"];
-                        //var winValue = node.ChildNodes.OfType<XmlNode>().FirstOrDefault(x => x.Name == "value").InnerText;
-                        //{ Node = node, Value = winValue, Name = winName.Value }
-                        var winNode = new XmlNodeWithValue(node, false);
-
-                        var englishNodeWithTanimoto = enXml.ChildNodes.OfType<XmlNode>().Select(x => new XmlNodeWithValue(x, true)
-                        {
-                            Tanimoto = TanimotoStringComparer.Tanimoto(x.InnerText, winNode.Value, 1.2)
-                        }).Where(x => x.Tanimoto > 0.7);
-
-                        if (englishNodeWithTanimoto.Count() == 0)
-                        {
-                            continue;
-                        }
-
-                        var maxTanimoto = englishNodeWithTanimoto.Max(x => x.Tanimoto);
-                        var englishNode = englishNodeWithTanimoto.FirstOrDefault(x => x.Tanimoto == maxTanimoto);
-
-                        var japanNode = jaXml.ChildNodes.OfType<XmlNode>().FirstOrDefault(x => x.NodeType != XmlNodeType.Comment
-                                                                                               && x.Attributes["name"].Value == englishNode.Node.Attributes["name"].Value);
-
-                        var ourJapanXmlNode = new XmlNodeWithValue(japanNode, true);
-                        SaveToCsv(writer, winNode, englishNode, ourJapanXmlNode);
-                    }
+                    writer.Close();
                 }
-
-                writer.Close();
             }
         }
 
-        private static void SaveToCsv(StreamWriter writer, 
-                                      XmlNodeWithValue winNode, 
-                                      XmlNodeWithValue englishNode, 
-                                      XmlNodeWithValue japanNode)
-        {
-            writer.WriteLine($"'{winNode.Name}';'{winNode.Value}';'{englishNode.Name}';'{englishNode.Value}';'{japanNode.Name}';'{japanNode.Value}'");
-        }
     }
 }
