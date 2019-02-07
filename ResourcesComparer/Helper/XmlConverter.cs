@@ -85,7 +85,7 @@
                              + $"{englishNode.Name};"
                              + $"'{englishNode.Value.Replace(";", "|").Replace(Environment.NewLine, string.Empty)}';"
                              + $"{japanNode?.Name ?? englishNode.Name};"
-                             + $"'{(japanNode?.Value ?? englishNode.Value).Replace("; ", " | ").Replace(Environment.NewLine, string.Empty)}'");
+                             + $"{(japanNode?.Value ?? englishNode.Value).Replace(";", " | ").Replace(Environment.NewLine, string.Empty)}");
         }
     }
 }
